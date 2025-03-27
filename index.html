@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue.js 网页布局</title>
+  <style>
+    .app-container {
+      display: flex;
+      height: 100vh;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f0faf7;
+    }
+
+    .sidebar {
+      width: 240px;
+      background-color: #f8fcfb;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      padding: 16px;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar.collapsed {
+      width: 72px;
+    }
+
+    .sidebar.collapsed li {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 12px 8px;
+    }
+
+    .sidebar ul {
+      list-style-type: none; /* 去掉默认的点样式 */
+      padding-left: 0; /* 去掉默认的左边距 */
+    }
+
+    .sidebar li {
+      list-style-type: none; /* 去掉默认的点样式 */
+      padding: 12px 16px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      color: #2c7a7b;
+      font-size: 14px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background-color: #e6fffa;
+    }
+
+    .sidebar li:hover {
+      background-color: #b2f5ea;
+      color: #285e61;
+    }
+
+    .content {
+      flex: 1;
+      padding: 24px;
+      background-color: #ffffff;
+    }
+
+    .toggle-btn {
+      position: absolute;
+      right: -12px;
+      top: 16px;
+      width: 32px;
+      height: 32px;
+      background: #ffffff;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: #2c7a7b;
+    }
+
+    .toggle-btn:hover {
+      background: #e6fffa;
+      color: #285e61;
+      transform: scale(1.1);
+    }
+
+    h1 {
+      color: #285e61;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    p {
+      color: #4a5568;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .search-bar {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      padding: 16px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 8px;
+      border-radius: 4px;
+      z-index: 1000;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .search-bar button {
+      padding: 8px 16px;
+      background-color: #2c7a7b;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .search-bar button:hover {
+      background-color: #285e61;
+    }
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-logo {
+      width: 40px;
+      height: 40px;
+      margin-right: 12px;
+    }
+
+    .card-title {
+      color: #285e61;
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .card-description {
+      color: #4a5568;
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      padding: 16px;
+      background-color: #2c7a7b;
+      color: #ffffff;
+      font-size: 14px;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+      z-index: 999;
+    }
+
+
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <!-- 新增头部区域 -->
+    <div class="header">
+      <!-- 品牌LOGO和名称 -->
+      <div class="brand-logo">
+        <img src="https://via.placeholder.com/40" alt="品牌LOGO">
+        <div class="brand-name">品牌名称</div>
+      </div>
+      <!-- 搜索栏 -->
+      <!-- 搜索栏 -->
+          <div class="search-bar">
+            <input type="text" placeholder="搜索..." v-model="searchKeyword" @keyup.enter="search">
+            <button @click="search">搜索</button>
+          </div>
+    </div>
+
+    <div class="app-container">
+      <!-- 左侧导航栏 -->
+      <div class="sidebar" :class="{ collapsed: isCollapsed }">
+        <div class="toggle-btn" @click="toggleSidebar">
+          {{ isCollapsed ? '>' : '<' }}
+        </div>
+        <ul>
+          <li v-for="category in categories" :key="category" @click="selectCategory(category)">
+            {{ category }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- 修改内容区域 -->
+      <div class="content">
+        <h1>{{ isSearching ? '搜索结果' : selectedCategory }}</h1>
+        <div class="card-container">
+          <div class="card" v-for="(card, index) in (isSearching ? searchResults : categoryContent[selectedCategory])" :key="index">
+            <div class="card-header">
+              <img :src="card.logo" alt="logo" class="card-logo">
+              <h3 class="card-title">{{ card.title }}</h3>
+            </div>
+            <p class="card-description">{{ card.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2023 公司名称. 保留所有权利。
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          categories: ['首页', '产品', '关于我们', '联系我们'],
+          selectedCategory: '首页',
+          searchKeyword: '',
+          isSearching: false,
+          categoryContent: {
+            '首页': [
+              { title: '欢迎信息', logo: 'https://via.placeholder.com/40', description: '欢迎来到我们的网站！' },
+              { title: '最新动态', logo: 'https://via.placeholder.com/40', description: '查看我们最新的更新。' }
+            ],
+            '产品': [
+              { title: '产品A', logo: 'https://via.placeholder.com/40', description: '这是我们最畅销的产品。' },
+              { title: '产品B', logo: 'https://via.placeholder.com/40', description: '最新推出的创新产品。' }
+            ],
+            '关于我们': [
+              { title: '公司历史', logo: 'https://via.placeholder.com/40', description: '了解我们的发展历程。' },
+              { title: '团队介绍', logo: 'https://via.placeholder.com/40', description: '认识我们的专业团队。' }
+            ],
+            '联系我们': [
+              { title: '联系方式', logo: 'https://via.placeholder.com/40', description: '获取我们的联系信息。' },
+              { title: '办公地址', logo: 'https://via.placeholder.com/40', description: '查看我们的办公地点。' }
+            ]
+          },
+          isCollapsed: false
+        };
+      },
+      computed: {
+        searchResults() {
+          if (!this.searchKeyword) return this.categoryContent[this.selectedCategory];
+          const results = [];
+          Object.values(this.categoryContent).forEach(cards => {
+            cards.forEach(card => {
+              if (card.title.includes(this.searchKeyword) || 
+                  card.description.includes(this.searchKeyword)) {
+                results.push(card);
+              }
+            });
+          });
+          return results;
+        }
+      },
+      methods: {
+        selectCategory(category) {
+          this.selectedCategory = category;
+          this.searchKeyword = ''; // 清空搜索关键词
+          this.isSearching = false;
+        },
+        toggleSidebar() {
+          this.isCollapsed = !this.isCollapsed;
+        },
+        search() {
+          this.isSearching = !!this.searchKeyword; // 根据是否有搜索关键词设置搜索状态
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
