@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -311,3 +311,50 @@
   </script>
 </body>
 </html>
+
+<style>
+  @media (max-width: 768px) {
+    .app-container {
+      flex-direction: column;
+    }
+    
+    .sidebar {
+      width: 100%;
+      height: auto;
+      padding: 8px;
+    }
+    
+    .sidebar.collapsed {
+      width: 100%;
+    }
+    
+    .search-bar {
+      width: 90%;
+      top: 8px;
+      padding: 8px;
+    }
+    
+    .card-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .card-logo {
+      width: 60px;
+      height: 30px;
+    }
+    
+    .footer {
+      position: static;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .sidebar {
+      width: 180px;
+    }
+    
+    .search-bar {
+      width: 70%;
+    }
+  }
+</style>
