@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vue.js 网页布局</title>
+  <title>AI Help Me</title>
   <style>
     .app-container {
       display: flex;
@@ -34,12 +34,12 @@
     }
 
     .sidebar ul {
-      list-style-type: none; /* 去掉默认的点样式 */
-      padding-left: 0; /* 去掉默认的左边距 */
+      list-style-type: none; 
+      padding-left: 0; 
     }
 
     .sidebar li {
-      list-style-type: none; /* 去掉默认的点样式 */
+      list-style-type: none;
       padding: 12px 16px;
       cursor: pointer;
       margin-bottom: 8px;
@@ -59,6 +59,8 @@
       flex: 1;
       padding: 24px;
       background-color: #ffffff;
+      overflow-y: auto;  
+      height: calc(100vh - 48px); 
     }
 
     .toggle-btn {
@@ -147,6 +149,7 @@
       padding: 16px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       transition: transform 0.3s ease;
+      cursor: pointer; 
     }
 
     .card:hover {
@@ -160,7 +163,7 @@
     }
 
     .card-logo {
-      width: 40px;
+      width: 80px;
       height: 40px;
       margin-right: 12px;
     }
@@ -194,28 +197,26 @@
     }
 
 
+
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="app">
-    <!-- 新增头部区域 -->
+  <div id="app" v-cloak>
     <div class="header">
-      <!-- 品牌LOGO和名称 -->
       <div class="brand-logo">
-        <img src="https://via.placeholder.com/40" alt="品牌LOGO">
-        <div class="brand-name">品牌名称</div>
+        <!--<img src="https://via.placeholder.com/40" alt="LOGO">-->
+        <div class="brand-name">Ai Help Me</div>
       </div>
-      <!-- 搜索栏 -->
-      <!-- 搜索栏 -->
+      <!-- Search -->
           <div class="search-bar">
-            <input type="text" placeholder="搜索..." v-model="searchKeyword" @keyup.enter="search">
-            <button @click="search">搜索</button>
+            <input type="text" placeholder="Search..." v-model="searchKeyword" @keyup.enter="search">
+            <button @click="search">Search</button>
           </div>
     </div>
 
     <div class="app-container">
-      <!-- 左侧导航栏 -->
+      <!-- sidebar -->
       <div class="sidebar" :class="{ collapsed: isCollapsed }">
         <div class="toggle-btn" @click="toggleSidebar">
           {{ isCollapsed ? '>' : '<' }}
@@ -227,11 +228,11 @@
         </ul>
       </div>
 
-      <!-- 修改内容区域 -->
+      <!-- content -->
       <div class="content">
-        <h1>{{ isSearching ? '搜索结果' : selectedCategory }}</h1>
+        <h1>{{ isSearching ? 'Search Result' : selectedCategory }}</h1>
         <div class="card-container">
-          <div class="card" v-for="(card, index) in (isSearching ? searchResults : categoryContent[selectedCategory])" :key="index">
+          <div class="card" v-for="(card, index) in (isSearching ? searchResults : categoryContent[selectedCategory])" :key="index" @click="openUrl(card.url)">
             <div class="card-header">
               <img :src="card.logo" alt="logo" class="card-logo">
               <h3 class="card-title">{{ card.title }}</h3>
@@ -244,7 +245,7 @@
   </div>
 
   <div class="footer">
-    &copy; 2023 公司名称. 保留所有权利。
+    &copy; 2025 AI Help Me。
   </div>
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -254,26 +255,22 @@
     createApp({
       data() {
         return {
-          categories: ['首页', '产品', '关于我们', '联系我们'],
-          selectedCategory: '首页',
+          categories: ['Home', 'Chat','Video'],
+          selectedCategory: 'Home',
           searchKeyword: '',
           isSearching: false,
           categoryContent: {
-            '首页': [
-              { title: '欢迎信息', logo: 'https://via.placeholder.com/40', description: '欢迎来到我们的网站！' },
-              { title: '最新动态', logo: 'https://via.placeholder.com/40', description: '查看我们最新的更新。' }
+            'Home': [
+              { title: 'ChatGPT', logo: './ChatGPT-Logo.png', description: 'Our mission is to ensure that artificial general intelligence benefits all of humanity.',url:'https://openai.com/' },
+              { title: 'DeepSeek', logo: './deepseek-logo.png', description: 'Into the unknown.',url:'https://www.deepseek.com/en' }
             ],
-            '产品': [
-              { title: '产品A', logo: 'https://via.placeholder.com/40', description: '这是我们最畅销的产品。' },
-              { title: '产品B', logo: 'https://via.placeholder.com/40', description: '最新推出的创新产品。' }
+            'Chat': [
+              { title: 'ChatGPT', logo: './ChatGPT-Logo.png', description: 'Our mission is to ensure that artificial general intelligence benefits all of humanity.' ,url:'https://openai.com/'},
+              { title: 'DeepSeek', logo: './deepseek-logo.png', description: 'Into the unknown.',url:'https://www.deepseek.com/en' }
             ],
-            '关于我们': [
-              { title: '公司历史', logo: 'https://via.placeholder.com/40', description: '了解我们的发展历程。' },
-              { title: '团队介绍', logo: 'https://via.placeholder.com/40', description: '认识我们的专业团队。' }
-            ],
-            '联系我们': [
-              { title: '联系方式', logo: 'https://via.placeholder.com/40', description: '获取我们的联系信息。' },
-              { title: '办公地址', logo: 'https://via.placeholder.com/40', description: '查看我们的办公地点。' }
+            'Video': [
+              { title: 'RunWay', logo: './runway-log.png', description: 'Advancing creativity with artificial intelligence.' ,url:'https://runwayml.com/'},
+              { title: 'Sora', logo: './ChatGPT-Logo.png', description: 'Bring your imagination to life with text, image, or video.',url:'https://openai.com/sora/' }
             ]
           },
           isCollapsed: false
@@ -297,14 +294,17 @@
       methods: {
         selectCategory(category) {
           this.selectedCategory = category;
-          this.searchKeyword = ''; // 清空搜索关键词
+          this.searchKeyword = ''; 
           this.isSearching = false;
         },
         toggleSidebar() {
           this.isCollapsed = !this.isCollapsed;
         },
         search() {
-          this.isSearching = !!this.searchKeyword; // 根据是否有搜索关键词设置搜索状态
+          this.isSearching = !!this.searchKeyword;
+        },
+        openUrl(url) {
+          window.open(url, '_blank');
         }
       }
     }).mount('#app');
