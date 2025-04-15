@@ -255,7 +255,7 @@
     createApp({
       data() {
         return {
-          categories: ['Home', 'Chat','Video'],
+          categories: ['Home', 'Chat','Video','Music'],
           selectedCategory: 'Home',
           searchKeyword: '',
           isSearching: false,
@@ -273,6 +273,9 @@
             'Video': [
               { title: 'RunWay', logo: './runway-log.png', description: 'Advancing creativity with artificial intelligence.' ,url:'https://runwayml.com/'},
               { title: 'Sora', logo: './ChatGPT-Logo.png', description: 'Bring your imagination to life with text, image, or video.',url:'https://openai.com/sora/' }
+            ],
+            'Music': [
+              { title: 'Suno', logo: './sunoai-logo.svg', description: 'Free AI Music Generator. ',url:'https://sunoai-music.com/'}, 
             ]
           },
           isCollapsed: false
